@@ -30,7 +30,7 @@ interface FindChangesOptions {
 /**
  * Find all changes to a repo since
  */
-module.exports.findChanges = async function* findChanges({token, owner, repo, base, head}: FindChangesOptions): AsyncGenerator<Change> {
+async function* findChanges({token, owner, repo, base, head}: FindChangesOptions): AsyncGenerator<Change> {
   const yieldedPrNumbers = new Set<number>()
   const {Octokit} = require('@octokit/rest')
   const octokit = new Octokit({ 
@@ -88,4 +88,8 @@ module.exports.findChanges = async function* findChanges({token, owner, repo, ba
     }
   }
 
+}
+
+module.exports = {
+  findChanges
 }
