@@ -1,3 +1,15 @@
+# v0.1.5 (Thu Dec 12 2024)
+
+#### ⚠️ Pushed to `main`
+
+- silence os warning ([@jameslnewell](https://github.com/jameslnewell))
+
+#### Authors: 1
+
+- James Newell ([@jameslnewell](https://github.com/jameslnewell))
+
+---
+
 # v0.1.2 (Thu Dec 12 2024)
 
 #### ⚠️ Pushed to `main`
