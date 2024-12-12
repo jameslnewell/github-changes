@@ -1,0 +1,15 @@
+{
+  "name": "@jameslnewell/github-changes",
+  "description": "Find Github changes",
+  "type": "module",
+  "dependencies": {
+    "@octokit/rest": "^21.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  },
+  "scripts": {
+    "test": "node --test --experimental-strip-types"
+  }
+}
