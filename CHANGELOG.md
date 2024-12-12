@@ -1,3 +1,15 @@
+# v0.1.6 (Thu Dec 12 2024)
+
+#### ⚠️ Pushed to `main`
+
+- buid with types and source maps ([@jameslnewell](https://github.com/jameslnewell))
+
+#### Authors: 1
+
+- James Newell ([@jameslnewell](https://github.com/jameslnewell))
+
+---
+
 # v0.1.5 (Thu Dec 12 2024)
 
 #### ⚠️ Pushed to `main`
