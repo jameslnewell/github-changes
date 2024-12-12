@@ -1,6 +1,3 @@
-import {Octokit} from '@octokit/rest'
-import { connect } from 'http2'
-
 
 interface PrChange {
   type: 'pr'
@@ -33,8 +30,9 @@ interface FindChangesOptions {
 /**
  * Find all changes to a repo since
  */
-export async function* findChanges({token, owner, repo, base, head}: FindChangesOptions): AsyncGenerator<Change> {
+module.exports.findChanges = async function* findChanges({token, owner, repo, base, head}: FindChangesOptions): AsyncGenerator<Change> {
   const yieldedPrNumbers = new Set<number>()
+  const {Octokit} = require('@octokit/rest')
   const octokit = new Octokit({ 
     auth: token,
   });
@@ -47,7 +45,7 @@ export async function* findChanges({token, owner, repo, base, head}: FindChanges
   })
 
   for await (const commitsPage of commitsPaginator) {
-    const commits = (commitsPage as Awaited<ReturnType<typeof octokit.repos.compareCommitsWithBasehead>>).data.commits
+    const commits = (commitsPage as unknown as Awaited<ReturnType<typeof octokit.repos.compareCommitsWithBasehead>>).data.commits
     for (const commit of commits) {
 
           // find associated PRs

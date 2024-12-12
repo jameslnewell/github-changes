@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "ES2016",
+    "module": "Node16",
+    "moduleResolution": "Node16"
+  },
+  "include": ["src"],
+  "exclude": ["src/*.test.ts"]
+}

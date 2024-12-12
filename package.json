@@ -1,7 +1,9 @@
 {
   "name": "@jameslnewell/github-changes",
   "description": "Find Github changes",
-  "type": "module",
+  "type": "commonjs",
+  "files": ["dist"],
+  "main": "dist/index.js",
   "dependencies": {
     "@octokit/rest": "^21.0.2"
   },
@@ -10,6 +12,7 @@
     "typescript": "^5.7.2"
   },
   "scripts": {
+    "build": "tsc --project tsconfig.build.json",
     "test": "node --test --experimental-strip-types"
   }
 }

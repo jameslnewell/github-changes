@@ -1,6 +1,6 @@
-import {suite, test} from 'node:test';
-import {deepEqual, equal} from 'node:assert'
-import { findChanges } from "./index.ts";
+const {suite, test} = require('node:test');
+const {deepEqual, equal} = require('node:assert')
+const { findChanges } = require("./index.ts");
 
 const token = process.env.GITHUB_TOKEN
 if (!token) throw "GITHUB_TOKEN is not defined"
@@ -15,7 +15,7 @@ async function toArray<T>(iterator: AsyncGenerator<T>): Promise<T[]> {
   return entries
 }
 
-suite(findChanges.name, () => {
+suite('findChanges', () => {
 
   test('returns an empty array', async () => {
     const entries = await toArray(findChanges({
