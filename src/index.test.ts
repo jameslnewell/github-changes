@@ -36,7 +36,14 @@ suite(findChanges.name, () => {
       base: 'test-single-commit-base',
       head: 'test-single-commit-head'
     }))
-    deepEqual(entries, [])
+    deepEqual(entries, [
+      {
+        author: 'jameslnewell',
+        message: 'iterating on tests',
+        type: 'commit',
+        url: 'https://github.com/jameslnewell/github-changes/commit/7fb1a17d72ffa04ef03fdc95376ede7cb7119ad9'
+      }
+    ])
   }) 
 
   test('returns a single PR', async () => {
@@ -44,10 +51,11 @@ suite(findChanges.name, () => {
       token, 
       owner,
       repo,
-      base: 'test-single-commit-base',
-      head: 'test-single-commit-head'
+      base: 'test-single-pr-base',
+      head: 'test-single-pr-head'
     }))
     deepEqual(entries, [])
   })
 
 })
+ 
