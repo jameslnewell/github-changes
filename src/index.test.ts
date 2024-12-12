@@ -54,8 +54,18 @@ suite(findChanges.name, () => {
       base: 'test-single-pr-base',
       head: 'test-single-pr-head'
     }))
-    deepEqual(entries, [])
+    deepEqual(entries,     [
+      {
+        author: 'jameslnewell',
+        body: '',
+        labels: [],
+        number: 2,
+        title: 'test changes',
+        type: 'pr',
+        url: 'https://github.com/jameslnewell/github-changes/pull/2'
+      }
+    ])
   })
 
-})
- 
+}) 
+  
