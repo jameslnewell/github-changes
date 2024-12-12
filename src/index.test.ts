@@ -1,4 +1,5 @@
 import {suite, test} from 'node:test';
+import {deepEqual, equal} from 'node:assert'
 import { findChanges } from "./index.ts";
 
 const token = process.env.GITHUB_TOKEN
@@ -24,7 +25,7 @@ suite(findChanges.name, () => {
       base: 'test-no-changes-base',
       head: 'test-no-changes-head'
     }))
-    console.log(entries)
+    equal(entries.length, 0)
   })
 
   test('returns a single commit', async () => {
@@ -35,8 +36,8 @@ suite(findChanges.name, () => {
       base: 'test-single-commit-base',
       head: 'test-single-commit-head'
     }))
-    console.log(entries)
-  })
+    deepEqual(entries, [])
+  }) 
 
   test('returns a single PR', async () => {
     const entries = await toArray(findChanges({
@@ -46,7 +47,7 @@ suite(findChanges.name, () => {
       base: 'test-single-commit-base',
       head: 'test-single-commit-head'
     }))
-    console.log(entries)
+    deepEqual(entries, [])
   })
 
 })
