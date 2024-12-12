@@ -11,7 +11,7 @@ suite(findChanges.name, () => {
       token: GITHUB_TOKEN, 
       owner: 'jameslnewell',
       repo: 'github-changes',
-      base: 'main',
+      base: 'bc94bc5c96784b3e616dae9415da5536c9a4b719',
       head: 'HEAD'
     })) {
       console.log(change)
@@ -19,3 +19,4 @@ suite(findChanges.name, () => {
   })
 
 })
+ 
