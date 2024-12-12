@@ -1,12 +1,22 @@
 import {Octokit} from '@octokit/rest'
+import { connect } from 'http2'
 
 
 interface PrChange {
   type: 'pr'
+  url: string
+  number: number
+  title: string
+  body: string
+  labels: string[]
+  author?: string
 }
 
 interface CommitChange {
   type: 'commit'
+  url: string
+  message: string
+  author?: string
 }
 
 type Change = PrChange | CommitChange
@@ -23,39 +33,58 @@ interface FindChangesOptions {
  * Find all changes to a repo since
  */
 export async function* findChanges({token, owner, repo, base, head}: FindChangesOptions): AsyncGenerator<Change> {
+  const yieldedPrNumbers = new Set<number>()
   const octokit = new Octokit({ 
     auth: token,
   });
 
-  const compareCommitsResponse = await octokit.repos.compareCommits({
+  // we could potentially make fewer requests using the strategy mentioned at https://github.com/orgs/community/discussions/73691 but then SHAs won't work
+  const commitsPaginator = octokit.paginate.iterator(octokit.repos.compareCommitsWithBasehead, {
     owner, 
     repo,
-    base,
-    head
+    basehead: `${base}...${head}`
   })
 
-  for (const commit of compareCommitsResponse.data.commits) {
-    console.log('COMMIT')
-    console.log(commit)
+  for await (const commitsPage of commitsPaginator) {
+    const commits = (commitsPage as Awaited<ReturnType<typeof octokit.repos.compareCommitsWithBasehead>>).data.commits
+    for (const commit of commits) {
 
-    const commitPullsResponse = await octokit.request('GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls', {
-      owner,
-      repo,
-      commit_sha: commit.sha,
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
-    })
-    console.log('PULLS')
-    console.log(commitPullsResponse.data)
-    if (commitPullsResponse.data.length === 0) {
-      yield {
-        type: 'commit',
-      }
-    } else {
-      yield {
-        type: 'pr'
-      }
+          // find associated PRs
+          const commitPullsResponse = await octokit.request('GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls', {
+            owner,
+            repo,
+            commit_sha: commit.sha,
+            headers: {
+              'X-GitHub-Api-Version': '2022-11-28'
+            }
+          })
+          
+          if (commitPullsResponse.data.length > 0) {
+            for (const pull of commitPullsResponse.data) {
+              // avoid yielding the same PR multiple times because many commits may be associated with a single PR
+              if (yieldedPrNumbers.has(pull.number)) continue
+              yieldedPrNumbers.add(pull.number)
+      
+              // TODO: filter whether the pull request is on the branch
+              // if (pull.base.ref !== base) continue // TODO: otherwise just yield the commit
+              yield {
+                type: 'pr',
+                url: pull.html_url,
+                number: pull.number,
+                title: pull.title,
+                body: pull.body ?? '',
+                labels: pull.labels.map(label => label.name),
+                author: pull.user?.login
+              }
+            }
+          } else {
+            yield {
+              type: 'commit',
+              url: commit.html_url,
+              message: commit.commit.message,
+              author: commit.committer?.login ?? commit.author?.login
+            }
+          }
     }
   }
 
