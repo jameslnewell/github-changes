@@ -40,6 +40,7 @@ suite(findChanges.name, () => {
       {
         author: 'jameslnewell',
         message: 'iterating on tests',
+        sha: '7fb1a17d72ffa04ef03fdc95376ede7cb7119ad9',
         type: 'commit',
         url: 'https://github.com/jameslnewell/github-changes/commit/7fb1a17d72ffa04ef03fdc95376ede7cb7119ad9'
       }

@@ -15,6 +15,7 @@ interface PrChange {
 interface CommitChange {
   type: 'commit'
   url: string
+  sha: string
   message: string
   author?: string
 }
@@ -81,6 +82,7 @@ export async function* findChanges({token, owner, repo, base, head}: FindChanges
             yield {
               type: 'commit',
               url: commit.html_url,
+              sha: commit.sha,
               message: commit.commit.message,
               author: commit.committer?.login ?? commit.author?.login
             }
