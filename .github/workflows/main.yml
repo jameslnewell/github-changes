@@ -24,6 +24,7 @@ jobs:
           restore-keys: ${{ runner.os }}-node-
       - run: npm ci
       - run: npm run build
+      - run: git fetch --unshallow --tags
       - run: npm x -y auto shipit
         if: github.ref == 'refs/heads/main'
         env:
