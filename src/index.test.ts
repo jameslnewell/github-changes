@@ -4,9 +4,9 @@ import { findChanges } from "./index.ts";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN
 if (!GITHUB_TOKEN) throw "GITHUB_TOKEN is not defined"
 
-suite(findChanges.toString(), () => {
+suite(findChanges.name, () => {
 
-  test('finds stuff', async () => {
+  test('log stuff', async () => {
     for await (const change of findChanges({
       token: GITHUB_TOKEN, 
       owner: 'jameslnewell',
