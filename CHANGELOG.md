@@ -1,3 +1,15 @@
+# v0.1.7 (Thu Dec 12 2024)
+
+#### ⚠️ Pushed to `main`
+
+- build for commonjs ([@jameslnewell](https://github.com/jameslnewell))
+
+#### Authors: 1
+
+- James Newell ([@jameslnewell](https://github.com/jameslnewell))
+
+---
+
 # v0.1.6 (Thu Dec 12 2024)
 
 #### ⚠️ Pushed to `main`
