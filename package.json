@@ -1,6 +1,7 @@
 {
   "name": "@jameslnewell/github-changes",
   "description": "Find Github changes",
+  "author": {"name": "James Newell", "email": "gday@jameslnewell.dev"},
   "version": "0.1.1",
   "type": "commonjs",
   "files": ["dist"],
