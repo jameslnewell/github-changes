@@ -1,3 +1,15 @@
+# v0.2.0 (Mon Jan 06 2025)
+
+#### 🚀 Enhancement
+
+- changes [#4](https://github.com/jameslnewell/github-changes/pull/4) ([@jameslnewell](https://github.com/jameslnewell))
+
+#### Authors: 1
+
+- James Newell ([@jameslnewell](https://github.com/jameslnewell))
+
+---
+
 # v0.1.7 (Thu Dec 12 2024)
 
 #### ⚠️ Pushed to `main`
