@@ -6,7 +6,7 @@
     "email": "gday@jameslnewell.dev"
   },
   "version": "0.1.7",
-  "type": "commonjs",
+  "type": "module",
   "files": [
     "dist"
   ],

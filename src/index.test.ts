@@ -1,13 +1,16 @@
-const {suite, test} = require('node:test');
-const {deepEqual, equal} = require('node:assert')
-const { findChanges } = require("./index.ts");
+import {suite, test} from 'node:test';
+import {deepEqual, equal} from 'node:assert'
+import { findChanges } from "./index.ts";
+import { Octokit } from '@octokit/rest';
 
-const token = process.env.GITHUB_TOKEN
-if (!token) throw "GITHUB_TOKEN is not defined"
+const octokit = new Octokit({ 
+  auth: process.env['GITHUB_TOKEN'] 
+})
+
 const owner = 'jameslnewell'
 const repo = 'github-changes'
 
-async function toArray<T>(iterator: AsyncGenerator<T>): Promise<T[]> {
+async function toArray<T>(iterator: AsyncIterable<T>): Promise<T[]> {
   const entries: T[] = []
   for await (const entry of iterator) {
     entries.push(entry)
@@ -19,7 +22,7 @@ suite('findChanges', () => {
 
   test('returns an empty array', async () => {
     const entries = await toArray(findChanges({
-      token, 
+      octokit,
       owner,
       repo,
       base: 'test-no-changes-base',
@@ -30,7 +33,7 @@ suite('findChanges', () => {
 
   test('returns a single commit', async () => {
     const entries = await toArray(findChanges({
-      token, 
+      octokit,
       owner,
       repo,
       base: 'test-single-commit-base',
@@ -49,7 +52,7 @@ suite('findChanges', () => {
 
   test('returns a single PR', async () => {
     const entries = await toArray(findChanges({
-      token, 
+      octokit,
       owner,
       repo,
       base: 'test-single-pr-base',
