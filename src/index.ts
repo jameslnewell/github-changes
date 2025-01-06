@@ -1,3 +1,4 @@
+import type {Octokit} from '@octokit/rest'
 
 interface PrChange {
   type: 'pr'
@@ -6,6 +7,7 @@ interface PrChange {
   title: string
   body: string
   labels: string[]
+  /** The Github username of the person who made the change */
   author?: string
 }
 
@@ -14,13 +16,14 @@ interface CommitChange {
   url: string
   sha: string
   message: string
+  /** The Github username of the person who made the change */
   author?: string
 }
 
-type Change = PrChange | CommitChange
+export type Change = PrChange | CommitChange
 
 interface FindChangesOptions {
-  token: string
+  octokit: Octokit
   owner: string
   repo: string
   base: string
@@ -30,12 +33,8 @@ interface FindChangesOptions {
 /**
  * Find all changes to a repo since
  */
-async function* findChanges({token, owner, repo, base, head}: FindChangesOptions): AsyncGenerator<Change> {
+export async function* findChanges({octokit, owner, repo, base, head}: FindChangesOptions): AsyncGenerator<Change> {
   const yieldedPrNumbers = new Set<number>()
-  const {Octokit} = require('@octokit/rest')
-  const octokit = new Octokit({ 
-    auth: token,
-  });
 
   // we could potentially make fewer requests using the strategy mentioned at https://github.com/orgs/community/discussions/73691 but then SHAs won't work
   const commitsPaginator = octokit.paginate.iterator(octokit.repos.compareCommitsWithBasehead, {
@@ -49,6 +48,7 @@ async function* findChanges({token, owner, repo, base, head}: FindChangesOptions
     for (const commit of commits) {
 
           // find associated PRs
+          // TODO: support pagination
           const commitPullsResponse = await octokit.request('GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls', {
             owner,
             repo,
@@ -88,8 +88,4 @@ async function* findChanges({token, owner, repo, base, head}: FindChangesOptions
     }
   }
 
-}
-
-module.exports = {
-  findChanges
 }
