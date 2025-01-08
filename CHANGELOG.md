@@ -1,3 +1,15 @@
+# v0.2.2 (Wed Jan 08 2025)
+
+#### 🐛 Bug Fix
+
+- run tests on ci [#6](https://github.com/jameslnewell/github-changes/pull/6) ([@jameslnewell](https://github.com/jameslnewell))
+
+#### Authors: 1
+
+- James Newell ([@jameslnewell](https://github.com/jameslnewell))
+
+---
+
 # v0.2.1 (Wed Jan 08 2025)
 
 #### 🐛 Bug Fix
