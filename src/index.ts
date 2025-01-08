@@ -9,6 +9,10 @@ interface PrChange {
   labels: string[]
   /** The Github username of the person who made the change */
   author?: string
+  /** The branch the PR is targetting */
+  base: string
+  /** The branch the PR is on */
+  head: string
 }
 
 interface CommitChange {
@@ -73,7 +77,9 @@ export async function* findChanges({octokit, owner, repo, base, head}: FindChang
                 title: pull.title,
                 body: pull.body ?? '',
                 labels: pull.labels.map(label => label.name),
-                author: pull.user?.login
+                author: pull.user?.login,
+                base: pull.base.ref,
+                head: pull.head.ref,
               }
             }
           } else {
