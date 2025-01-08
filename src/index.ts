@@ -9,7 +9,7 @@ interface PrChange {
   labels: string[]
   /** The Github username of the person who made the change */
   author?: string
-  /** The branch the PR is targetting */
+  /** The branch the PR will be merged into */
   base: string
   /** The branch the PR is on */
   head: string
