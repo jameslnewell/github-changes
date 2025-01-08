@@ -1,3 +1,15 @@
+# v0.2.1 (Wed Jan 08 2025)
+
+#### 🐛 Bug Fix
+
+- add base and head properties to PRs [#5](https://github.com/jameslnewell/github-changes/pull/5) ([@jameslnewell](https://github.com/jameslnewell))
+
+#### Authors: 1
+
+- James Newell ([@jameslnewell](https://github.com/jameslnewell))
+
+---
+
 # v0.2.0 (Mon Jan 06 2025)
 
 #### 🚀 Enhancement
