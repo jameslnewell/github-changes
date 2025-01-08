@@ -66,7 +66,9 @@ suite('findChanges', () => {
         number: 2,
         title: 'test changes',
         type: 'pr',
-        url: 'https://github.com/jameslnewell/github-changes/pull/2'
+        url: 'https://github.com/jameslnewell/github-changes/pull/2',
+        base: 'main',
+        head: 'test-pr'
       }
     ])
   })
