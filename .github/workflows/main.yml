@@ -1,4 +1,4 @@
-name: test, build and publish
+name: 🤖
 on: [push]
 
 jobs:
