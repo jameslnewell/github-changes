@@ -19,8 +19,8 @@ function printReleaseInformation() {
     token, 
     owner,
     repo,
-    base: 'main',
-    head: 'latest'
+    base: 'last-release',
+    head: 'main'
   })) {
     if (change.type === 'pr') {
       console.log(` - #${change.number} by @${change.author}: ${change.title}...`)
