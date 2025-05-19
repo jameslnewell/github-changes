@@ -1,11 +1,11 @@
-# @jameslnewel/github-changes
+# @jameslnewell/github-changes
 
 Library for finding changes (PRs or commits) between two `git` refs.
 
 ## Installation
 
 ```console
-npm i -S @jameslnewel/github-changes
+npm i -S @jameslnewell/github-changes
 ```
 
 ## Usage
