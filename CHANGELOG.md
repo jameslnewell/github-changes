@@ -1,3 +1,15 @@
+# v0.2.4 (Mon May 19 2025)
+
+#### ⚠️ Pushed to `main`
+
+- Update README.md ([@jameslnewell](https://github.com/jameslnewell))
+
+#### Authors: 1
+
+- James Newell ([@jameslnewell](https://github.com/jameslnewell))
+
+---
+
 # v0.2.3 (Wed Jan 08 2025)
 
 #### ⚠️ Pushed to `main`
