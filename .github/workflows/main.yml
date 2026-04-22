@@ -61,7 +61,6 @@ jobs:
         with:
           node-version: '22.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: npm config delete //registry.npmjs.org/:_authToken
       - uses: actions/download-artifact@v4
         with:
           name: dist
@@ -70,4 +69,5 @@ jobs:
       - run: npm x -y auto shipit
         env:
           GH_TOKEN: ${{ github.token }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: 'true'
