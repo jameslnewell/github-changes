@@ -1,3 +1,27 @@
+# v0.2.6 (Wed Apr 22 2026)
+
+#### 🐛 Bug Fix
+
+- Fix web-flow being shown as commit author instead of the real author [#7](https://github.com/jameslnewell/github-changes/pull/7) ([@jameslnewell](https://github.com/jameslnewell))
+
+#### ⚠️ Pushed to `main`
+
+- chore: upgrade to Node 24 (ships with npm 11 for OIDC trusted publishing) ([@jameslnewell](https://github.com/jameslnewell))
+- fix: upgrade npm to v11.5.1+ required for OIDC trusted publishing ([@jameslnewell](https://github.com/jameslnewell))
+- fix: use npm trusted publishing via OIDC (no token required) ([@jameslnewell](https://github.com/jameslnewell))
+- fix: restore NODE_AUTH_TOKEN for npm publish ([@jameslnewell](https://github.com/jameslnewell))
+- fix: use npm trusted publishing by removing empty auth token before publish ([@jameslnewell](https://github.com/jameslnewell))
+- fix: restore npm token auth while keeping provenance attestation ([@jameslnewell](https://github.com/jameslnewell))
+- fix: remove registry-url from publish job so npm uses OIDC token exchange ([@jameslnewell](https://github.com/jameslnewell))
+- fix: publish to npm using OIDC provenance instead of a token ([@jameslnewell](https://github.com/jameslnewell))
+- fix: publish scoped package as public to npm ([@jameslnewell](https://github.com/jameslnewell))
+
+#### Authors: 1
+
+- James Newell ([@jameslnewell](https://github.com/jameslnewell))
+
+---
+
 # v0.2.5 (Mon May 19 2025)
 
 #### ⚠️ Pushed to `main`
