@@ -88,7 +88,8 @@ export async function* findChanges({octokit, owner, repo, base, head}: FindChang
               url: commit.html_url,
               sha: commit.sha,
               message: commit.commit.message,
-              author: commit.committer?.login ?? commit.author?.login
+              // author is the developer who wrote the code; committer is often web-flow for GitHub-merged PRs
+              author: commit.author?.login ?? commit.committer?.login
             }
           }
     }
