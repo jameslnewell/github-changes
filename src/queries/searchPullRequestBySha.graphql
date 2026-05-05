@@ -1,0 +1,21 @@
+query SearchPullRequestBySha($q: String!) {
+  search(query: $q, type: ISSUE, first: 1) {
+    nodes {
+      __typename
+      ... on PullRequest {
+        number
+        title
+        body
+        url
+        author {
+          login
+        }
+        labels(first: 100) {
+          nodes {
+            name
+          }
+        }
+      }
+    }
+  }
+}

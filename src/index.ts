@@ -1,4 +1,5 @@
 import type {Octokit} from '@octokit/rest'
+import type {SearchPullRequestByShaQuery} from './__generated__/graphql.ts'
 
 interface PrChange {
   type: 'pr'
@@ -32,51 +33,44 @@ interface FindChangesOptions {
 
 const BATCH_SIZE = 20
 
-interface CompareCommit {
-  sha: string
-  html_url: string
-  commit: {message: string}
-  author: {login: string} | null
-  committer: {login: string} | null
-}
+type CompareCommit = Awaited<ReturnType<Octokit['repos']['compareCommitsWithBasehead']>>['data']['commits'][number]
 
-interface PullRequestNode {
-  __typename: 'PullRequest'
-  number: number
-  title: string
-  body: string | null
-  url: string
-  author: {login: string} | null
-  labels: {nodes: Array<{name: string}>}
-}
+// One alias of the dynamic batched query corresponds to one execution of the
+// canonical `searchPullRequestBySha.graphql` document, so each alias's response
+// shape is `SearchPullRequestByShaQuery['search']`. Codegen ties this to the
+// schema; if the .graphql query drifts from the schema (renamed field, etc.),
+// the generated type changes and TypeScript errors below.
+type AliasedSearchResult = SearchPullRequestByShaQuery['search']
+type SearchNode = NonNullable<NonNullable<AliasedSearchResult['nodes']>[number]>
+type PullRequestNode = Extract<SearchNode, {__typename: 'PullRequest'}>
 
-interface SearchResult {
-  nodes: Array<PullRequestNode | {__typename: string}>
-}
-
-function isPullRequestNode(
-  node: PullRequestNode | {__typename: string} | undefined
-): node is PullRequestNode {
+function isPullRequestNode(node: SearchNode | null | undefined): node is PullRequestNode {
   return node?.__typename === 'PullRequest'
 }
 
+// Mirror the field selection in src/queries/searchPullRequestBySha.graphql.
+// Codegen validates the .graphql file against the schema; this string must stay
+// in sync with that file's selection set.
+const SEARCH_SELECTION = `
+  nodes {
+    __typename
+    ... on PullRequest {
+      number
+      title
+      body
+      url
+      author { login }
+      labels(first: 100) { nodes { name } }
+    }
+  }
+`
+
 function buildBatchQuery(size: number): string {
   const variableDecls = Array.from({length: size}, (_, i) => `$q${i}: String!`).join(', ')
-  const aliases = Array.from({length: size}, (_, i) => `
-    s${i}: search(query: $q${i}, type: ISSUE, first: 1) {
-      nodes {
-        __typename
-        ... on PullRequest {
-          number
-          title
-          body
-          url
-          author { login }
-          labels(first: 100) { nodes { name } }
-        }
-      }
-    }
-  `).join('\n')
+  const aliases = Array.from(
+    {length: size},
+    (_, i) => `s${i}: search(query: $q${i}, type: ISSUE, first: 1) {${SEARCH_SELECTION}}`
+  ).join('\n')
   return `query SearchByShas(${variableDecls}) {\n${aliases}\n}`
 }
 
@@ -111,13 +105,13 @@ export async function* findChanges({octokit, owner, repo, base, head}: FindChang
     // Resolve commits → PRs in a single HTTP request via aliased GraphQL search.
     // Each aliased sub-query consumes one search-rate-limit unit; consumers should
     // pass an Octokit configured with @octokit/plugin-throttling to handle 429s.
-    const data = await octokit.graphql<Record<string, SearchResult>>(query, variables)
+    const data = await octokit.graphql<Record<string, AliasedSearchResult>>(query, variables)
 
     for (let i = 0; i < current.length; i++) {
       const commit = current[i]
       if (!commit) continue
       const result = data[`s${i}`]
-      const node = result?.nodes[0]
+      const node = result?.nodes?.[0]
 
       if (isPullRequestNode(node)) {
         if (yieldedPrNumbers.has(node.number)) continue
@@ -128,7 +122,7 @@ export async function* findChanges({octokit, owner, repo, base, head}: FindChang
           number: node.number,
           title: node.title,
           body: node.body ?? '',
-          labels: node.labels.nodes.map((label) => label.name),
+          labels: (node.labels?.nodes ?? []).flatMap((label) => (label ? [label.name] : [])),
           author: node.author?.login,
         }
       } else {
@@ -147,7 +141,7 @@ export async function* findChanges({octokit, owner, repo, base, head}: FindChang
   for await (const commitsPage of commitsPaginator) {
     const commits = (commitsPage as unknown as Awaited<ReturnType<typeof octokit.repos.compareCommitsWithBasehead>>).data.commits
     for (const commit of commits) {
-      batch.push(commit as unknown as CompareCommit)
+      batch.push(commit)
       if (batch.length >= BATCH_SIZE) {
         yield* flushBatch()
       }
