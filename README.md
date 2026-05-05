@@ -31,6 +31,25 @@ function printReleaseInformation() {
 }
 ```
 
+## Octokit configuration
+
+Pass an `Octokit` instance configured with `@octokit/plugin-retry` and `@octokit/plugin-throttling` so the library handles GitHub's secondary rate limits gracefully — the Search API used to resolve commits to PRs has a 30-requests-per-minute cap.
+
+```ts
+import { Octokit } from '@octokit/rest'
+import { retry } from '@octokit/plugin-retry'
+import { throttling } from '@octokit/plugin-throttling'
+
+const ThrottledOctokit = Octokit.plugin(retry, throttling)
+const octokit = new ThrottledOctokit({
+  auth: process.env.GITHUB_TOKEN,
+  throttle: {
+    onRateLimit: (retryAfter, _options, _octokit, retryCount) => retryCount < 3,
+    onSecondaryRateLimit: (retryAfter, _options, _octokit, retryCount) => retryCount < 3,
+  },
+})
+```
+
 ```
 Release includes the following changes: 
  - #2 by @jameslnewell: test changes...
