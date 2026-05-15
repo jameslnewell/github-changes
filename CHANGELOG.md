@@ -1,3 +1,16 @@
+# v0.2.7 (Fri May 15 2026)
+
+#### 🐛 Bug Fix
+
+- Use a RELEASE_TOKEN PAT for auto shipit's push [#18](https://github.com/jameslnewell/github-changes/pull/18) (jameslnewell@gmail.com)
+- Enable Dependabot with auto-merge for minor and patch updates [#9](https://github.com/jameslnewell/github-changes/pull/9) (jameslnewell@gmail.com)
+
+#### Authors: 1
+
+- James Newell ([@jameslnewell](https://github.com/jameslnewell))
+
+---
+
 # v0.2.6 (Wed Apr 22 2026)
 
 #### 🐛 Bug Fix
